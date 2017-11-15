@@ -1,0 +1,14 @@
+from modules import mydes
+
+M_mydes = mydes.MyDES()
+
+M_mydesBorja = mydes.MyDES()
+
+M_mydes.IP.append('hola')
+M_mydesBorja.IP.append('Full Testing')
+print M_mydesBorja.IP
+print M_mydes.IP
+
+Z = bin(int(M_mydes.IP,16))
+
+print Z[2:].zfill(16)
