@@ -1,5 +1,5 @@
 from modules import mydes
-
+#Definicion de variables
 My_des = mydes.MyDES()
 Array = []
 C0 = []
@@ -9,6 +9,10 @@ R0 = []
 K = []
 Key = []
 E = []
+X = []
+Zint = []
+Zfinal = []
+MenEncr = []
 clave = "0123456789ABCDEF"
 Mensaje = "0123456789ABCDEF"
 def shift(l, n):
@@ -57,14 +61,39 @@ def OperDatos2(K,Key,R0):
     #Expando R0
     for i in My_des.ETable:
         E.append(R0[i - 1] )
-    E1 = bin(int(''.join(map(str, E)), 2) << 1)
-    E1 = E1[2:].zfill(4)
+    #Suma XOR de R0 Expandido y K
+    for x in range(0, len(E)):
+        num = int(E[x]) + int(K[x])
+        if num==0 or num ==2:
+            X.append(0)
+        elif num==1:
+            X.append(1)
+    y=0
+    xs=0
+    while xs <8:
+        for x in range (y,y+6):
+            Zint.append(X[x])
+        z1 = int(Zint[y]) + int(Zint[y+5])
+        z2 = 8*int(Zint[y+1]) + 4*int(Zint[y+2]) + 2*int(Zint[y+3]) + int(Zint[y+4])
+        z3 = My_des.STablas[xs][z1][z2]
+        y = y+6
+        xs=xs+1
+        f=bin(z3)
+        f= f[2:].zfill(4)
+        for i in f:
+            Zfinal.append(i)
+    for i in My_des.PTable:
+        MenEncr.append(Zfinal[i - 1])
+    print MenEncr
 
 
-    C='100010'
 
-    D='101001'
-    print int(C,2) + int(D,2)
+
+
+
+
+
+
 ConvBin(clave)
 OperDatos(Mensaje)
 OperDatos2(K, Key, R0)
