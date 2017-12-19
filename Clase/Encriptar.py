@@ -10,7 +10,7 @@ clave = "0123456789ABCDEF"
 Mensaje = "0123456789ABCDEF"
 def shift(l, n):
     return l[n:] + l[:n]
-def ConvBin(clave,round, Array):
+def ConvBin(clave,round, Array, C0, D0):
     #Pasamos los numeros en Hexa de la clave a binario
     if round == 0:
         for i in clave:
@@ -18,31 +18,41 @@ def ConvBin(clave,round, Array):
             letra = letra[2:].zfill(4)
             for j in letra:
                 Array.append(j)
+        # Aplicamos PC1 para obtener C0 Y D0
         for i in My_des.PC1[:28]:
             C0.append(Array[i - 1])
         for i in My_des.PC1[28:]:
             D0.append(Array[i - 1])
+        #Cogemos el valor del shifting que nos toca de la tabla/
+        Shift = My_des.ShiftT[round]
+
+        #Aplicamos el shifting izquierdo a C0 y D0, consiguiendo C1y D1
+        c1 = shift(C0, Shift)
+        d1 = shift(D0, Shift)
+        k1 = c1 + d1
+        for i in My_des.PC2:
+            K.append(k1[i - 1])
+        return K
     else:
-        print Array
-        print C0
-        print D0
+        del C0[:]; del D0[:];
+        for i in My_des.PC1[:28]:
+            C0.append(Array[i - 1])
+        for i in My_des.PC1[28:]:
+            D0.append(Array[i - 1])
         del Array[:]
-        Array = C0 + D0
-        del C0[:]; del D0[:]
-        #Aplicamos PC1 para obtener C0 Y D0
+        Shift = My_des.ShiftT[round]
+
+        # Aplicamos el shifting izquierdo a C0 y D0, consiguiendo C1y D1
+        c1 = shift(C0, Shift)
+        d1 = shift(D0, Shift)
+        k1 = c1 + d1
+        for i in My_des.PC2:
+            K.append(k1[i - 1])
+        return K
 
 
-    #Cogemos el valor del shifting que nos toca de la tabla
-    Shift = My_des.ShiftT[round]
 
-    #Aplicamos el shifting izquierdo a C0 y D0, consiguiendo C1y D1
-    c1 = shift(C0, Shift)
-    d1 = shift(D0, Shift)
-    k1 = c1 + d1
-    print C0
-    for i in My_des.PC2:
-        K.append(k1[i - 1])
-    return K
+
 
 def OperDatos(Mensaje):
     # Pasamos los numeros en Hexa deL mensaje a binario
@@ -87,14 +97,13 @@ def OperDatos2(K,R0):
 
 
 def vaciarVariables():
-    del L0[:]; del R0[:]; del Array[:]
+    del L0[:]; del R0[:];
     del K[:]; del X[:]; del Zint[:]
     del E[:]
 
-
 for round in range(16):
-    ConvBin(clave,round, Array)
     OperDatos(Mensaje)
+    ConvBin(clave,round, Array, C0, D0)
     OperDatos2(K, R0)
     vaciarVariables()
 
