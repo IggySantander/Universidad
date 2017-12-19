@@ -118,5 +118,8 @@ for round in range(16):
 round = round +1
 OperDatos(Mensaje, L0, R0)
 PasoFinal(L0,R0,MenEncripFinal)
-print MenEncripFinal
+Fin = ''.join(MenEncripFinal)
+Fin = hex(int(Fin,2))
+
+print Fin[2:]
 
