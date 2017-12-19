@@ -1,7 +1,7 @@
 from modules import mydes
 #Definicion de variables
 My_des = mydes.MyDES()
-Array = [];
+Array = []
 C0 = []; D0 = []; L0 = []
 R0 = []; K = []
 E = []; X = []; Zint = []
@@ -10,18 +10,27 @@ clave = "0123456789ABCDEF"
 Mensaje = "0123456789ABCDEF"
 def shift(l, n):
     return l[n:] + l[:n]
-def ConvBin(clave,round):
+def ConvBin(clave,round, Array):
     #Pasamos los numeros en Hexa de la clave a binario
-    for i in clave:
-        letra = bin(int(i, 16))
-        letra = letra[2:].zfill(4)
-        for i in letra:
-            Array.append(i)
-    #Aplicamos PC1 para obtener C0 Y D0
-    for i in My_des.PC1[:28]:
-        C0.append(Array[i - 1])
-    for i in My_des.PC1[28:]:
-        D0.append(Array[i - 1])
+    if round == 0:
+        for i in clave:
+            letra = bin(int(i, 16))
+            letra = letra[2:].zfill(4)
+            for j in letra:
+                Array.append(j)
+        for i in My_des.PC1[:28]:
+            C0.append(Array[i - 1])
+        for i in My_des.PC1[28:]:
+            D0.append(Array[i - 1])
+    else:
+        print Array
+        print C0
+        print D0
+        del Array[:]
+        Array = C0 + D0
+        del C0[:]; del D0[:]
+        #Aplicamos PC1 para obtener C0 Y D0
+
 
     #Cogemos el valor del shifting que nos toca de la tabla
     Shift = My_des.ShiftT[round]
@@ -78,15 +87,13 @@ def OperDatos2(K,R0):
 
 
 def vaciarVariables():
-    del Array[:]; del C0[:]; del D0[:]
     del L0[:]; del R0[:]; del Array[:]
     del K[:]; del X[:]; del Zint[:]
     del E[:]
 
 
 for round in range(16):
-
-    ConvBin(clave,round)
+    ConvBin(clave,round, Array)
     OperDatos(Mensaje)
     OperDatos2(K, R0)
     vaciarVariables()
