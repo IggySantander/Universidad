@@ -9,10 +9,16 @@ Zfinal = []; frK = [];
 VI =  []; MenEncripFinal = []
 clave   = "0123456789ABCDEF"
 Mensaje = "0123456789ABCDEF"
+c1=0
+d1=0
 
+
+#Hace el shifting
 def shift(l, n):
     return l[n:] + l[:n]
 
+
+#Funcion que hace la XOR de dos arrays
 def XOR(Array1, Array2):
     Array3 = []
     del Array3[:]
@@ -23,6 +29,9 @@ def XOR(Array1, Array2):
         elif num == 1:
             Array3.append('1')
     return Array3
+
+
+#Funcion que nos da la KI en cada iteraccion
 def ConvBin(clave,round, ClavBin, c1, d1, VI):
     del VI[:]
     #Pasamos los numeros en Hexa de la clave a binario
@@ -59,22 +68,7 @@ def ConvBin(clave,round, ClavBin, c1, d1, VI):
             VI.append(k1[i - 1])
         return VI,c1,d1
 
-
-
-
-
-#def mApply(input,matriz):
-  #  for i in range (len(matriz))
-  #  result[i] = [0]*len(input)
-  #  result = input[matriz[i]]
-
-#def matrix_apply(input, matrix):
- #   output = [0] * len(matrix)
-  #  for cont in range(len(matrix)):
-    #    output[cont] = input[matrix[cont]]
-   # return output
-
-
+#Funcion que nos da L0 Y R0 en cada iteraccion
 def OperDatos(Mensaje, L0, R0, frK):
     if round == 0:
         # Pasamos los numeros en Hexa deL mensaje a binario
@@ -93,11 +87,14 @@ def OperDatos(Mensaje, L0, R0, frK):
         return L0,R0
 
     else:
+        #Conseguir L0 y R0 despues de la primera iteraccion
         varInt= R0
         R0 = XOR(L0,frK)
         L0 = varInt
 
         return L0,R0
+
+#Funcion que nos da frK en cada iteraccion, para luego sumarselo a la XOR
 
 def OperDatos2(VI,R0, frK):
     #Expando R0
@@ -114,39 +111,53 @@ def OperDatos2(VI,R0, frK):
     while xs <8:
         for x in range (y,y+6):
             Zint.append(X[x])
-        Sfila = int(Zint[y]) + int(Zint[y+5])
-        print "Fila", Sfila
+        Sfila = 2*int(Zint[y]) + int(Zint[y+5])
+        #Calcula la fila que toca
         Scolumna = 8*int(Zint[y+1]) + 4*int(Zint[y+2]) + 2*int(Zint[y+3]) + int(Zint[y+4])
-        print "Columna", Scolumna
+        #Calcula la columna que toca
         z3 = My_des.STablas[xs][Sfila][Scolumna]
-        print "Valor Tabla", z3,"\n"
+        #Coge el valor, de la tabla, fila y columna correspondiente
         y = y+6
         xs=xs+1
         f=bin(z3)
         f= f[2:].zfill(4)
+        #Convierte a binario
         for i in f:
             Zfinal.append(i)
+        #Pone todos los resultados de las puertas S en binario en el array Zfina
     for i in My_des.PTable:
         frK.append(Zfinal[i - 1])
+    #Aplico permutacion a Zfinal,y consigo frk
     del Zfinal[:]
     return frK
 
+#Cojo el vector final y lo permuto
 def PasoFinal(L0,R0,MenEncripFinal):
     k1= R0 + L0
     for j in My_des.IP1:
         MenEncripFinal.append(k1[j - 1])
     return MenEncripFinal
 
-c1=0
-d1=0
+
+
+##############################################
+#
+#
+#       Programa principal
+#
+#
+##############################################
+
+
 for round in range(16):
     L0, R0 = OperDatos(Mensaje, L0, R0, frK)
     VI,c1,d1 = ConvBin(clave, round, ClavBin, c1, d1, VI)
     frK = OperDatos2(VI, R0,frK)
+
 round = round +1
 L0,R0 = OperDatos(Mensaje, L0, R0, frK)
 MenEncripFinal= PasoFinal(L0,R0,MenEncripFinal)
 Fin = ''.join(MenEncripFinal)
 Fin = hex(int(Fin,2))
-print Fin[2:]
+print "El resultado final encriptado es: ", Fin[2:]
 
