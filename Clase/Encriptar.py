@@ -7,8 +7,8 @@ R0 = []; K = []
 E = []; X = []; Zint = []
 Zfinal = []; frK = [];
 VI =  []; MenEncripFinal = []
-clave   = "123456ABCD789EF0"
-Mensaje = "123456ABCD789EF0"
+clave   = "4B45595F54455354"
+Mensaje = "49545F574F524B53"
 c1=0
 d1=0
 
