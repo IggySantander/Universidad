@@ -1,4 +1,5 @@
 from modules import mydes
+import binascii
 #Definicion de variables
 My_des = mydes.MyDES()
 MenBin = []; ClavBin = []
@@ -8,7 +9,7 @@ E = []; X = []; Zint = []
 Zfinal = []; frK = [];
 VI =  []; MenEncripFinal = []
 clave   = "4B45595F54455354"
-Mensaje = "49545F574F524B53"
+Mensaje = "1234ABCDEF567890"
 c1=0
 d1=0
 
@@ -162,6 +163,11 @@ round = round +1
 L0,R0 = OperDatos(Mensaje, L0, R0, frK)
 MenEncripFinal= PasoFinal(L0,R0,MenEncripFinal)
 Fin = ''.join(MenEncripFinal)
-Fin = hex(int(Fin,2))
-print "El resultado final encriptado es: ", Fin[2:]
+Fin = int(Fin,2)
+Fin = hex(Fin).strip('L')
+Fin = Fin[2:]
+if len(Fin) < 16:
+    Fin = Fin.zfill(16)
+print "Este es el mensaje encriptado", Fin
+
 
