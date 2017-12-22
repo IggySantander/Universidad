@@ -7,8 +7,8 @@ R0 = []; K = []
 E = []; X = []; Zint = []
 Zfinal = []; frK = [];
 VI =  []; MenEncripFinal = []
-clave   = "0123456789ABCDEF"
-Mensaje = "0123456789ABCDEF"
+clave   = "123456ABCD789EF0"
+Mensaje = "123456ABCD789EF0"
 c1=0
 d1=0
 
@@ -36,6 +36,8 @@ def ConvBin(clave,round, ClavBin, c1, d1, VI):
     del VI[:]
     #Pasamos los numeros en Hexa de la clave a binario
     if round == 0:
+        #Rellenamos con ceros si la clave no llega a 16 elementos
+        clave= clave.zfill(16)
         for i in clave:
             letra = bin(int(i, 16))
             letra = letra[2:].zfill(4)
@@ -71,6 +73,8 @@ def ConvBin(clave,round, ClavBin, c1, d1, VI):
 #Funcion que nos da L0 Y R0 en cada iteraccion
 def OperDatos(Mensaje, L0, R0, frK):
     if round == 0:
+        #Rellenamos con ceros si el mensaje no tiene 16 elementos
+        Mensaje = Mensaje.zfill(16)
         # Pasamos los numeros en Hexa deL mensaje a binario
         for i in Mensaje:
             letra = bin(int(i, 16))
